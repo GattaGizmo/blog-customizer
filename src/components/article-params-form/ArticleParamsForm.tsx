@@ -29,43 +29,50 @@ type ArticleParamsFormProps = {
 
 export const ArticleParamsForm = ({ setAppState }: ArticleParamsFormProps) => {
 	const asideRef = useRef<HTMLDivElement>(null);
-	const [panelState, setPanelState] = useState(false);
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 	const [formState, setFormState] = useState(defaultArticleState);
 
-	const handlePanelToggle = () => {
-		setPanelState((prev) => !prev);
+	const toggleSidebar = () => {
+		setIsSidebarOpen((prev) => !prev);
 	};
 
 	const handleFormChange =
-		(option: keyof ArticleStateType) =>
-		(value: OptionType) => {
+		(option: keyof ArticleStateType) => (value: OptionType) => {
 			setFormState((prevState) => ({ ...prevState, [option]: value }));
 		};
 
-	const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setAppState(formState);
 	};
 
-	const formReset = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setFormState(defaultArticleState);
 		setAppState(defaultArticleState);
 	};
 
 	useOutsideClickClose({
-		isOpen: panelState,
+		isOpen: isSidebarOpen,
 		rootRef: asideRef,
-		onClose: handlePanelToggle,
-		onChange: setPanelState,
+		onClose: toggleSidebar,
+		onChange: setIsSidebarOpen,
 	});
 
 	return (
 		<>
-			<ArrowButton isOpen={panelState} onClick={handlePanelToggle} />
-			<aside ref={asideRef} className={clsx(styles.container, panelState && styles.container_open)}>
-				<form className={styles.form} onSubmit={formSubmit} onReset={formReset}>
-					<Text size={31} weight={800} uppercase>
+			<ArrowButton isOpen={isSidebarOpen} onClick={toggleSidebar} />
+			<aside
+				ref={asideRef}
+				className={clsx(
+					styles.container,
+					isSidebarOpen && styles.container_open
+				)}>
+				<form
+					className={styles.form}
+					onSubmit={handleSubmit}
+					onReset={handleReset}>
+					<Text as='h2' size={31} weight={800} uppercase>
 						Задайте параметры
 					</Text>
 
@@ -73,38 +80,38 @@ export const ArticleParamsForm = ({ setAppState }: ArticleParamsFormProps) => {
 						selected={formState.fontFamilyOption}
 						options={fontFamilyOptions}
 						onChange={handleFormChange('fontFamilyOption')}
-						title="Шрифт"
+						title='Шрифт'
 					/>
 					<RadioGroup
 						name={formState.fontSizeOption.className}
 						selected={formState.fontSizeOption}
 						options={fontSizeOptions}
 						onChange={handleFormChange('fontSizeOption')}
-						title="Размер шрифта"
+						title='Размер шрифта'
 					/>
 					<Select
 						selected={formState.fontColor}
 						options={fontColors}
 						onChange={handleFormChange('fontColor')}
-						title="Цвет шрифта"
+						title='Цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						selected={formState.backgroundColor}
 						options={backgroundColors}
 						onChange={handleFormChange('backgroundColor')}
-						title="Цвет фона"
+						title='Цвет фона'
 					/>
 					<Select
 						selected={formState.contentWidth}
 						options={contentWidthArr}
 						onChange={handleFormChange('contentWidth')}
-						title="Ширина контента"
+						title='Ширина контента'
 					/>
 
 					<div className={styles.bottomContainer}>
-						<Button title="Сбросить" htmlType="reset" type="clear" />
-						<Button title="Применить" htmlType="submit" type="apply" />
+						<Button title='Сбросить' htmlType='reset' type='clear' />
+						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
 			</aside>
