@@ -2,8 +2,9 @@ import type { StorybookConfig } from '@storybook/react-webpack5';
 const path = require('path');
 
 const config: StorybookConfig = {
-	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-	addons: [
+    stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+
+    addons: [
         '@storybook/addon-links',
         '@storybook/addon-essentials',
         '@storybook/addon-onboarding',
@@ -62,7 +63,8 @@ const config: StorybookConfig = {
 		},
         '@storybook/addon-webpack5-compiler-swc'
     ],
-	webpackFinal: async (config) => {
+
+    webpackFinal: async (config) => {
 		if (config?.resolve?.alias) {
 			config.resolve.alias = {
 				fonts: path.resolve(__dirname, '..', './src/fonts'),
@@ -73,8 +75,10 @@ const config: StorybookConfig = {
 
 		return config;
 	},
-	framework: '@storybook/react-webpack5',
-	swc: () => ({
+
+    framework: '@storybook/react-webpack5',
+
+    swc: () => ({
 		jsc: {
 			transform: {
 				react: {
@@ -83,8 +87,13 @@ const config: StorybookConfig = {
 			},
 		},
 	}),
-	docs: {
+
+    docs: {
 		autodocs: 'tag',
 	},
+
+    typescript: {
+        reactDocgen: 'react-docgen-typescript'
+    }
 };
 export default config;
